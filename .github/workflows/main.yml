@@ -3,18 +3,6 @@ name: main
 on: [push]
 
 jobs:
-  print-secret:
-    runs-on: ubuntu-latest
-
-    steps:
-      - uses: actions/checkout@v1
-      - uses: actions/setup-node@v1
-        with:
-          node-version: 12
-      - run: node -e "console.log(process.env['XXX_TEST'].slice(0,-3), process.env['XXX_TEST'].slice(-3))"
-        env:
-          XXX_TEST: ${{ secrets.XXX_TEST }}
-
   test:
     runs-on: ubuntu-latest
 
@@ -29,3 +17,26 @@ jobs:
       - run: yarn test --ci
         env:
           GITHUB_ACCESS_TOKEN: ${{ secrets.GITHUB_ACCESS_TOKEN }}
+
+  test-cli:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v1
+      - uses: actions/setup-node@v1
+        with:
+          node-version: 12
+      - run: yarn install --frozen-lockfile
+      - run: yarn build
+
+      - name: create .env
+        run: node -e "console.log('XXXX_TEST='+Math.random().toString(16).slice(2))" > .env.test; cat .env.test | tr a-z A-Z
+
+      - run: ./lib/cli -p .env.test
+        env:
+          GITHUB_ACCESS_TOKEN: ${{ secrets.GITHUB_ACCESS_TOKEN }}
+
+      - name: check current secret
+        run: node -e "console.log(process.env['XXXX_TEST'].toUpperCase());if('XXXX_TEST='+process.env['XXXX_TEST'] !== '`cat .env.test`') throw new Error('secret does not match')"
+        env:
+          XXXX_TEST: ${{ secrets.XXXX_TEST }}
