@@ -32,8 +32,8 @@ jobs:
       - name: create .env.test
         run: node -e "console.log('XXXX_TEST='+Math.random().toString(16).slice(2))" > .env.test; cat .env.test | tr a-z A-Z
 
-      - name: github-secret -p .env.test
-        run: ./lib/cli -p .env.test
+      - name: github-secret -e .env.test
+        run: ./lib/cli -e .env.test
         env:
           GITHUB_ACCESS_TOKEN: ${{ secrets.GITHUB_ACCESS_TOKEN }}
 

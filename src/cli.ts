@@ -7,33 +7,26 @@ import chalk from "chalk";
 
 program
   .name("github-secret")
-  .description("Upload secrets in github from your .env file.")
-  .option("-r, --repository <slug>", "repository full slug")
-  .option("-p, --path <path>", "dot env filename", ".env")
-  .option("-a, --githubAccessToken <token>", "github access token")
-  .option("-d, --delete", "remove from github secrets not in .env", false);
+  .description("Upload secrets to github from your .env file.")
+
+  .option(
+    "-r, --repository <slug>",
+    "repository full slug. If omitted, will be read from the package.json"
+  )
+  .option("-e, --dotEnvFilename <filename>", "dot env filename", ".env")
+  .option(
+    "-a, --githubAccessToken <token>",
+    "github access token. If omitted, will look for GITHUB_ACCESS_TOKEN env var"
+  )
+  .option("-d, --delete", "remove secrets not in .env", false);
 
 const parseOptions = options => {
   let owner,
     repo,
-    accessToken,
-    delete_ = false,
-    path = ".env";
+    accessToken = options.accessToken;
 
-  if (process.env.GITHUB_ACCESS_TOKEN) {
+  if (!accessToken && process.env.GITHUB_ACCESS_TOKEN) {
     accessToken = process.env.GITHUB_ACCESS_TOKEN;
-  }
-
-  if (options.githubAccessToken) {
-    accessToken = options.githubAccessToken;
-  }
-
-  if (options.path) {
-    path = options.path;
-  }
-
-  if (options.delete) {
-    delete_ = !!options.delete;
   }
 
   if (options.repository) {
@@ -50,19 +43,27 @@ const parseOptions = options => {
     }
   }
 
-  return { owner, repo, accessToken, path, delete: delete_ };
+  return {
+    owner,
+    repo,
+    accessToken,
+    dotEnvFilename: options.dotEnvFilename,
+    delete: options.delete
+  };
 };
 
 const upload = async options => {
-  const { owner, repo, accessToken, path, ...o } = parseOptions(options);
+  const { owner, repo, accessToken, dotEnvFilename, ...o } = parseOptions(
+    options
+  );
 
   if (!owner || !repo) throw new Error("undefined repository");
 
   if (!accessToken) throw new Error("undefined github access token");
 
-  console.log(`reading secrets from ${chalk.yellow(path)}`);
+  console.log(`reading secrets from ${chalk.yellow(dotEnvFilename)}`);
 
-  const env = readEnv({ path });
+  const env = readEnv({ path: dotEnvFilename });
 
   console.log(`uploading secrets to ${chalk.yellow(owner + "/" + repo)}`);
 
