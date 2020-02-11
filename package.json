@@ -1,7 +1,7 @@
 {
   "name": "github-secret-manager",
   "version": "0.0.1",
-  "description": ".",
+  "description": "upload secrets in github from your .env file",
   "repository": "github:platane/github-secret-manager",
   "author": {
     "name": "platane",
@@ -9,24 +9,24 @@
     "twitter": "platane_"
   },
   "dependencies": {
-    "@octokit/rest": "16.43.1",
-    "commander": "4.1.1",
-    "dotenv": "8.2.0",
-    "tweetnacl-util": "0.15.1",
-    "tweetsodium": "0.0.4"
+    "@octokit/rest": "^16.43.1",
+    "commander": "^4.1.1",
+    "dotenv": "^8.2.0",
+    "tweetnacl-util": "^0.15.1",
+    "tweetsodium": "^0.0.4"
   },
   "devDependencies": {
-    "@babel/cli": "7.8.4",
-    "@babel/core": "7.8.4",
-    "@babel/plugin-transform-modules-commonjs": "7.8.3",
-    "@babel/preset-typescript": "7.8.3",
-    "@types/jest": "25.1.2",
-    "@types/node": "13.7.0",
-    "babel-jest": "25.1.0",
-    "jest": "25.1.0",
-    "prettier": "1.19.1",
-    "ts-jest": "25.2.0",
-    "typescript": "3.7.5"
+    "@babel/cli": "^7.8.4",
+    "@babel/core": "^7.8.4",
+    "@babel/plugin-transform-modules-commonjs": "^7.8.3",
+    "@babel/preset-typescript": "^7.8.3",
+    "@types/jest": "^25.1.2",
+    "@types/node": "^13.7.0",
+    "babel-jest": "^25.1.0",
+    "jest": "^25.1.0",
+    "prettier": "^1.19.1",
+    "ts-jest": "^25.2.0",
+    "typescript": "^3.7.5"
   },
   "bin": {
     "github-secret": "./lib/cli.js"

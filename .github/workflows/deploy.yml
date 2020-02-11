@@ -6,7 +6,7 @@ on:
       - master
 
 jobs:
-  deploy-serverless:
+  publish-npm:
     runs-on: ubuntu-latest
 
     steps:
@@ -17,3 +17,7 @@ jobs:
 
       - run: yarn install --frozen-lockfile
       - run: yarn build
+      - run: mkdir npm-dist ; cp -r README.md package.json yarn.lock lib/ npm-dist/
+      - uses: JS-DevTools/npm-publish@v1
+        with:
+          token: ${{ secrets.NPM_TOKEN }}
