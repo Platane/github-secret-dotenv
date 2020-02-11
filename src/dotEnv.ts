@@ -10,5 +10,5 @@ export const readEnv = ({
 
   const a = dotenv.parse(content, dotEnvOptions);
 
-  return a;
+  return Object.entries(a).map(([name, value]) => ({ name, value }));
 };

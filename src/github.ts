@@ -36,8 +36,6 @@ export const createSecretUploader = ({ owner, repo, accessToken }) => {
 
     const encrypted_value = encrypt(key, value);
 
-    console.log(encrypted_value);
-
     await octokit.actions.createOrUpdateSecretForRepo({
       owner,
       repo,

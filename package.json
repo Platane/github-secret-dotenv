@@ -2,7 +2,7 @@
   "name": "github-secret-manager",
   "version": "0.0.1",
   "description": ".",
-  "repository": "github:Platane/github-secret-manager",
+  "repository": "github:platane/github-secret-manager",
   "author": {
     "name": "platane",
     "email": "me@platane.me",
@@ -12,15 +12,13 @@
     "@octokit/rest": "16.43.1",
     "commander": "4.1.1",
     "dotenv": "8.2.0",
-    "node-fetch": "2.6.0",
-    "tweetnacl": "1.0.3",
-    "tweetnacl-util": "^0.15.1",
+    "tweetnacl-util": "0.15.1",
     "tweetsodium": "0.0.4"
   },
   "devDependencies": {
     "@babel/cli": "7.8.4",
     "@babel/core": "7.8.4",
-    "@babel/plugin-transform-modules-commonjs": "7.6.0",
+    "@babel/plugin-transform-modules-commonjs": "7.8.3",
     "@babel/preset-typescript": "7.8.3",
     "@types/jest": "25.1.2",
     "@types/node": "13.7.0",
@@ -30,9 +28,13 @@
     "ts-jest": "25.2.0",
     "typescript": "3.7.5"
   },
+  "bin": {
+    "github-secret": "./lib/cli.js"
+  },
   "scripts": {
     "type": "tsc --noEmit",
     "test": "NODE_ENV=test jest",
-    "lint": "yarn prettier -c '**/*.{ts,tsx,js,jsx,json,md}' '!.build/**'"
+    "build": "babel src --extensions \".ts\" --out-dir lib --ignore \"**/__tests__/\",\"**/__fixtures__/\"",
+    "lint": "yarn prettier -c '**/*.{ts,tsx,js,jsx,json,md}' '!lib/**'"
   }
 }

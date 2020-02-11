@@ -1,4 +1,3 @@
-import nacl from "tweetnacl";
 import { decodeUTF8, decodeBase64, encodeBase64 } from "tweetnacl-util";
 import { seal } from "tweetsodium";
 

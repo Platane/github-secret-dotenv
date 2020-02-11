@@ -1,5 +1,8 @@
 require("dotenv").config();
-import { repository } from "../../package.json";
+import { readPackageJson } from "../readRepository";
 
-export const [owner, repo] = repository.replace(/^github:/, "").split("/");
+const m = readPackageJson() as any;
+
+export const owner = m.owner;
+export const repo = m.repo;
 export const accessToken = process.env.GITHUB_ACCESS_TOKEN as string;
