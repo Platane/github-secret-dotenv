@@ -18,26 +18,11 @@ jobs:
         env:
           GITHUB_ACCESS_TOKEN: ${{ secrets.GITHUB_ACCESS_TOKEN }}
 
-  test-cli:
+  print-secret:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v1
-      - uses: actions/setup-node@v1
-        with:
-          node-version: 12
-      - run: yarn install --frozen-lockfile
-      - run: yarn build
-
-      - name: create .env.test
-        run: node -e "console.log('XXXX_TEST='+Math.random().toString(16).slice(2))" > .env.test; cat .env.test | tr a-z A-Z
-
-      - name: github-secret -e .env.test
-        run: ./lib/cli -e .env.test
-        env:
-          GITHUB_ACCESS_TOKEN: ${{ secrets.GITHUB_ACCESS_TOKEN }}
-
       - name: check current secret
-        run: node -e "console.log('XXXX_TEST='+process.env['XXXX_TEST'].toUpperCase());if('XXXX_TEST='+process.env['XXXX_TEST'] !== '`cat .env.test`') throw new Error('secret does not match')"
+        run: echo XXX_TEST | tr a-z A-Z
         env:
-          XXXX_TEST: ${{ secrets.XXXX_TEST }}
+          XXX_TEST: ${{ secrets.XXX_TEST }}
