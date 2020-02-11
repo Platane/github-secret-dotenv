@@ -1,8 +1,8 @@
 {
-  "name": "github-secret-manager",
-  "version": "0.0.1",
+  "name": "github-secret-dotenv",
+  "version": "0.0.2",
   "description": "upload secrets in github from your .env file",
-  "repository": "github:platane/github-secret-manager",
+  "repository": "github:platane/github-secret-dotenv",
   "author": {
     "name": "platane",
     "email": "me@platane.me",
@@ -29,12 +29,12 @@
     "typescript": "^3.7.5"
   },
   "bin": {
-    "github-secret": "./lib/cli.js"
+    "github-secret": "./lib/cli"
   },
   "scripts": {
     "type": "tsc --noEmit",
     "test": "NODE_ENV=test jest",
-    "build": "babel src --extensions \".ts\" --out-dir lib --ignore \"**/__tests__/\",\"**/__fixtures__/\"",
+    "build": "babel src --extensions \".ts\" --copy-files --out-dir  lib --ignore \"**/__tests__/\",\"**/__fixtures__/\"",
     "lint": "yarn prettier -c '**/*.{ts,tsx,js,jsx,json,md}' '!lib/**'"
   }
 }
