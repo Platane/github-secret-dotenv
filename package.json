@@ -1,0 +1,38 @@
+{
+  "name": "github-secret-manager",
+  "version": "0.0.1",
+  "description": ".",
+  "repository": "github:Platane/github-secret-manager",
+  "author": {
+    "name": "platane",
+    "email": "me@platane.me",
+    "twitter": "platane_"
+  },
+  "dependencies": {
+    "@octokit/rest": "16.43.1",
+    "commander": "4.1.1",
+    "dotenv": "8.2.0",
+    "node-fetch": "2.6.0",
+    "tweetnacl": "1.0.3",
+    "tweetnacl-util": "^0.15.1",
+    "tweetsodium": "0.0.4"
+  },
+  "devDependencies": {
+    "@babel/cli": "7.8.4",
+    "@babel/core": "7.8.4",
+    "@babel/plugin-transform-modules-commonjs": "7.6.0",
+    "@babel/preset-typescript": "7.8.3",
+    "@types/jest": "25.1.2",
+    "@types/node": "13.7.0",
+    "babel-jest": "25.1.0",
+    "jest": "25.1.0",
+    "prettier": "1.19.1",
+    "ts-jest": "25.2.0",
+    "typescript": "3.7.5"
+  },
+  "scripts": {
+    "type": "tsc --noEmit",
+    "test": "NODE_ENV=test jest",
+    "lint": "yarn prettier -c '**/*.{ts,tsx,js,jsx,json,md}' '!.build/**'"
+  }
+}

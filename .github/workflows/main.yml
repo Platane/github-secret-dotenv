@@ -1,0 +1,16 @@
+name: main
+
+on: [push]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v1
+      - uses: actions/setup-node@v1
+        with:
+          node-version: 12
+      - run: node -e "console.log(process.env['XXX_TEST'].slice(0,-3), process.env['XXX_TEST'].slice(-3))"
+        env:
+          XXX_TEST: ${{ secrets.XXX_TEST }}
