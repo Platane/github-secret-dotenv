@@ -8,6 +8,13 @@
     "email": "me@platane.me",
     "twitter": "platane_"
   },
+  "keywords": [
+    "cli",
+    "github",
+    "github-actions",
+    "dotenv",
+    ".env"
+  ],
   "dependencies": {
     "@octokit/rest": "^16.43.1",
     "commander": "^4.1.1",
