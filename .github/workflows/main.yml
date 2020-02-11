@@ -29,14 +29,15 @@ jobs:
       - run: yarn install --frozen-lockfile
       - run: yarn build
 
-      - name: create .env
+      - name: create .env.test
         run: node -e "console.log('XXXX_TEST='+Math.random().toString(16).slice(2))" > .env.test; cat .env.test | tr a-z A-Z
 
-      - run: ./lib/cli -p .env.test
+      - name: github-secret -p .env.test
+        run: ./lib/cli -p .env.test
         env:
           GITHUB_ACCESS_TOKEN: ${{ secrets.GITHUB_ACCESS_TOKEN }}
 
       - name: check current secret
-        run: node -e "console.log(process.env['XXXX_TEST'].toUpperCase());if('XXXX_TEST='+process.env['XXXX_TEST'] !== '`cat .env.test`') throw new Error('secret does not match')"
+        run: node -e "console.log('XXXX_TEST='+process.env['XXXX_TEST'].toUpperCase());if('XXXX_TEST='+process.env['XXXX_TEST'] !== '`cat .env.test`') throw new Error('secret does not match')"
         env:
           XXXX_TEST: ${{ secrets.XXXX_TEST }}

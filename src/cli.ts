@@ -8,9 +8,9 @@ import chalk from "chalk";
 program
   .name("github-secret")
   .description("Upload secrets in github from your .env file.")
-  .option("-r <slug>, --repository <slug>", "repository full slug")
-  .option("-p <path>, --path <path>", "dot env filename", ".env")
-  .option("-a <token>, --githubAccessToken <token>", "github access token")
+  .option("-r, --repository <slug>", "repository full slug")
+  .option("-p, --path <path>", "dot env filename", ".env")
+  .option("-a, --githubAccessToken <token>", "github access token")
   .option("-d, --delete", "remove from github secrets not in .env", false);
 
 const parseOptions = options => {
