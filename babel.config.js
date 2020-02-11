@@ -3,10 +3,6 @@ const getConfig = env => {
 
   const presets = ["@babel/preset-typescript"];
 
-  // if (process.env.NODE_ENV === "test") {
-  //   plugins.push("@babel/plugin-transform-modules-commonjs");
-  // }
-
   return { plugins, presets };
 };
 
