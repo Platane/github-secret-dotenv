@@ -7,14 +7,8 @@ const getConfig = env => {
 };
 
 module.exports = api => {
-  /**
-   * cache the config with this key
-   */
-  api.cache.invalidate(
-    () => `${process.env.NODE_ENV || ""}.${process.env.BABEL_ENV || ""}`
-  );
-
-  return getConfig(api.env());
+  api.cache.never();
+  return getConfig();
 };
 
 module.exports.getConfig = getConfig;
