@@ -1,6 +1,8 @@
 import { listSecrets, createSecretUpdater, removeSecret } from "../github";
 import { owner, repo, accessToken } from "../__fixtures__/repository";
 
+jest.setTimeout(10000);
+
 it("list secrets", async () => {
   const secrets = await listSecrets({ owner, repo, accessToken });
 
@@ -16,20 +18,32 @@ it("update secret", async () => {
     "__test__" + Math.random().toString() + "__test__"
   );
 
-  const secrets = await listSecrets({ owner, repo, accessToken });
-
-  const secret = secrets.find(x => x.name === "XXX_TEST");
-
-  expect(secret).toBeDefined();
-  expect(secret && secret.updated_at).toBeGreaterThan(now - 1000);
+  {
+    const secrets = await listSecrets({ owner, repo, accessToken });
+    const secret = secrets.find(x => x.name === "XXX_TEST");
+    expect(secret).toBeDefined();
+    expect(secret && secret.updated_at).toBeGreaterThan(now - 1000);
+  }
 });
 
 it("remove secret", async () => {
-  await removeSecret({ owner, repo, accessToken }, "XXX_TEST");
+  const updateSecret = createSecretUpdater({ owner, repo, accessToken });
+  await updateSecret(
+    "YYY_TEST",
+    "__test__" + Math.random().toString() + "__test__"
+  );
 
-  const secrets = await listSecrets({ owner, repo, accessToken });
+  {
+    const secrets = await listSecrets({ owner, repo, accessToken });
+    const secret = secrets.find(x => x.name === "YYY_TEST");
+    expect(secret).toBeDefined();
+  }
 
-  const secret = secrets.find(x => x.name === "XXX_TEST");
+  await removeSecret({ owner, repo, accessToken }, "YYY_TEST");
 
-  expect(secret).toBeUndefined();
+  {
+    const secrets = await listSecrets({ owner, repo, accessToken });
+    const secret = secrets.find(x => x.name === "YYY_TEST");
+    expect(secret).toBeUndefined();
+  }
 });

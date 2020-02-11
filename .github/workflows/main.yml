@@ -22,7 +22,12 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: check current secret
-        run: echo XXX_TEST | tr a-z A-Z
+      - name: check current secret XXX_TEST
+        run: echo $XXX_TEST | tr a-z A-Z
         env:
           XXX_TEST: ${{ secrets.XXX_TEST }}
+
+      - name: check current secret YYY_TEST
+        run: echo $YYY_TEST | tr a-z A-Z
+        env:
+          YYY_TEST: ${{ secrets.YYY_TEST }}
