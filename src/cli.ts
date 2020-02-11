@@ -11,19 +11,23 @@ program
 
   .option(
     "-r, --repository <slug>",
-    "repository full slug. If omitted, will be read from the package.json"
+    "The github repository (<owner>/<repo>)\nIf omitted, read it from the package.json"
   )
-  .option("-e, --dotEnvFilename <filename>", "dot env filename", ".env")
+  .option("-e, --dotEnvFilename <filename>", "The .env file to read", ".env")
   .option(
     "-a, --githubAccessToken <token>",
-    "github access token. If omitted, will look for GITHUB_ACCESS_TOKEN env var"
+    "Your github access token\nIf omitted, read it from GITHUB_ACCESS_TOKEN env var\nGenerate one from https://github.com/settings/tokens/new\nMust have permissions [public_repo  read:public_key]"
   )
-  .option("-d, --delete", "remove secrets not in .env", false);
+  .option(
+    "-d, --delete",
+    "When set, remove all secrets that are not in the .env",
+    false
+  );
 
 const parseOptions = options => {
   let owner,
     repo,
-    accessToken = options.accessToken;
+    accessToken = options.githubAccessToken;
 
   if (!accessToken && process.env.GITHUB_ACCESS_TOKEN) {
     accessToken = process.env.GITHUB_ACCESS_TOKEN;

@@ -11,16 +11,23 @@
 
 # Usage
 
+```sh
+github-secret \
+
+  --repository platane/github-secret-dotenv \
+  # The github repository (<owner>/<repo>)
+  # If omitted, read it from the package.json
+
+  --dotEnvFilename ./.env \
+  # The .env file to read
+  # Default to .env
+
+  --githubAccessToken xxxx
+  # Your github access token
+  # If omitted, read it from GITHUB_ACCESS_TOKEN env var
+  # Generate one from https://github.com/settings/tokens/new
+  # Must have permissions [public_repo  read:public_key]
+
+  --delete
+  # When set, remove all secrets that are not in the .env
 ```
-github-secret --repository platane/github-secret-dotenv --dotEnvFilename ./.env --githubAccessToken xxxx
-```
-
-- `repository`
-
-  If omitted, the github repository is read from the package.json
-
-* `githubAccessToken`
-
-  Generate your token from [github.com/settings/tokens](https://github.com/settings/tokens)
-
-  If omited, can be passed as env var as `GITHUB_ACCESS_TOKEN`
