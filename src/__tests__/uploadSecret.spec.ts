@@ -15,5 +15,5 @@ it("uploadSecret", async () => {
   const secret = secrets.find(x => x.name === "XXX_TEST");
 
   expect(secret).toBeDefined();
-  expect(secret && secret.updated_at).toBeGreaterThan(now);
+  expect(secret && secret.updated_at).toBeGreaterThan(now - 1000);
 });
