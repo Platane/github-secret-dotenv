@@ -7,6 +7,8 @@
 
 > Upload secrets in github from your .env file
 
+![terminal screenshot](https://raw.githubusercontent.com/Platane/github-secret-dotenv/master/doc/terminal-screenshot.jpg)
+
 # Usage
 
 ```
