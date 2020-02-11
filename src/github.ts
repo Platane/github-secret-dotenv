@@ -19,7 +19,22 @@ export const listSecrets = async ({ owner, repo, accessToken }) => {
   }));
 };
 
-export const createSecretUploader = ({ owner, repo, accessToken }) => {
+export const removeSecret = async (
+  { owner, repo, accessToken },
+  name: string
+) => {
+  const octokit = new Octokit({
+    auth: accessToken
+  });
+
+  await octokit.actions.deleteSecretFromRepo({
+    owner,
+    repo,
+    name
+  });
+};
+
+export const createSecretUpdater = ({ owner, repo, accessToken }) => {
   const octokit = new Octokit({
     auth: accessToken
   });

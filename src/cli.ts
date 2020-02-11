@@ -1,5 +1,5 @@
 require("dotenv").config();
-import { createSecretUploader } from "./github";
+import { createSecretUpdater, listSecrets, removeSecret } from "./github";
 import { readEnv } from "./dotEnv";
 import program from "commander";
 import { readPackageJson } from "./readRepository";
@@ -10,12 +10,14 @@ program
   .description("Upload secrets in github from your .env file.")
   .option("-r <slug>, --repository <slug>", "repository full slug")
   .option("-p <path>, --path <path>", "dot env filename", ".env")
-  .option("-a <token>, --githubAccessToken <token>", "github access token");
+  .option("-a <token>, --githubAccessToken <token>", "github access token")
+  .option("-d, --delete", "remove from github secrets not in .env", false);
 
 const parseOptions = options => {
   let owner,
     repo,
     accessToken,
+    delete_ = false,
     path = ".env";
 
   if (process.env.GITHUB_ACCESS_TOKEN) {
@@ -28,6 +30,10 @@ const parseOptions = options => {
 
   if (options.path) {
     path = options.path;
+  }
+
+  if (options.delete) {
+    delete_ = !!options.delete;
   }
 
   if (options.repository) {
@@ -44,11 +50,11 @@ const parseOptions = options => {
     }
   }
 
-  return { owner, repo, accessToken, path };
+  return { owner, repo, accessToken, path, delete: delete_ };
 };
 
 const upload = async options => {
-  const { owner, repo, accessToken, path } = parseOptions(options);
+  const { owner, repo, accessToken, path, ...o } = parseOptions(options);
 
   if (!owner || !repo) throw new Error("undefined repository");
 
@@ -60,7 +66,7 @@ const upload = async options => {
 
   console.log(`uploading secrets to ${chalk.yellow(owner + "/" + repo)}`);
 
-  const upload = createSecretUploader({
+  const upload = createSecretUpdater({
     owner,
     repo,
     accessToken
@@ -68,9 +74,25 @@ const upload = async options => {
 
   await Promise.all(
     env.map(({ name, value }) =>
-      upload(name, value).then(() => console.log(`  ✔   ${name}`))
+      upload(name, value).then(() => console.log(`  ✔   ${name} updated`))
     )
   );
+
+  if (o.delete) {
+    console.log("");
+
+    const secrets = await listSecrets({ owner, repo, accessToken });
+
+    await Promise.all(
+      secrets
+        .filter(s => !env.some(e => e.name === s.name))
+        .map(s =>
+          removeSecret({ owner, repo, accessToken }, s.name).then(() =>
+            console.log(`  ✔   ${s.name} removed`)
+          )
+        )
+    );
+  }
 };
 
 upload(program.parse(process.argv));
