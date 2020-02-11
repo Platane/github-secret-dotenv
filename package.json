@@ -41,7 +41,7 @@
   "scripts": {
     "type": "tsc --noEmit",
     "test": "jest --verbose",
-    "build": "babel src --extensions \".ts\" --copy-files --out-dir  lib --ignore \"**/__tests__/\",\"**/__fixtures__/\"",
+    "build": "babel src --extensions \".ts\" --out-dir  lib --ignore \"**/__tests__/\",\"**/__fixtures__/\" && cp src/cli lib/",
     "lint": "yarn prettier -c '**/*.{ts,tsx,js,jsx,json,md}' '!lib/**'"
   }
 }
