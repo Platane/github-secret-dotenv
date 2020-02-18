@@ -1,4 +1,4 @@
-# Github Secret DotEnv
+# Github Secret DotEnv _(github-secret-dotenv)_
 
 ![type definitions](https://img.shields.io/npm/types/typescript?style=flat-square)
 ![code style](https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=flat-square)
@@ -8,6 +8,12 @@
 > Upload secrets to github from your .env file
 
 ![terminal screenshot](https://raw.githubusercontent.com/Platane/github-secret-dotenv/master/doc/terminal-screenshot.jpg)
+
+# Install
+
+```sh
+npm install -g github-secret-dotenv
+```
 
 # Usage
 
