@@ -41,7 +41,7 @@
   },
   "scripts": {
     "type": "tsc --noEmit",
-    "test": "jest --verbose",
+    "test": "YYY_TEST=leak jest --verbose",
     "build": "babel src --extensions \".ts\" --out-dir  lib --ignore \"**/__tests__/\",\"**/__fixtures__/\" && cp src/cli lib/",
     "lint": "yarn prettier -c '**/*.{ts,tsx,js,jsx,json,md}' '!lib/**'"
   }
