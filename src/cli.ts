@@ -24,9 +24,14 @@ program
     false
   );
 
-const parseOptions = options => {
-  let owner,
-    repo,
+const parseOptions = (options: {
+  githubAccessToken?: string;
+  repository?: string;
+  dotEnvFilename?: string;
+  delete?: boolean;
+}) => {
+  let owner: string | undefined,
+    repo: string | undefined,
     accessToken = options.githubAccessToken;
 
   if (!accessToken && process.env.GITHUB_ACCESS_TOKEN) {
@@ -34,8 +39,8 @@ const parseOptions = options => {
   }
 
   if (options.repository) {
-    owner = options.repository.slit("/")[0];
-    repo = options.repository.slit("/")[1];
+    owner = options.repository.split("/")[0];
+    repo = options.repository.split("/")[1];
   }
 
   if (!repo) {
@@ -56,7 +61,7 @@ const parseOptions = options => {
   };
 };
 
-const upload = async options => {
+const upload = async (options: any) => {
   const { owner, repo, accessToken, dotEnvFilename, ...o } = parseOptions(
     options
   );
