@@ -1,5 +1,6 @@
 import fs from "fs";
 import dotenv from "dotenv";
+import dotenvExpand from "dotenv-expand";
 
 export const readEnv = ({
   path = ".env",
@@ -8,7 +9,8 @@ export const readEnv = ({
 } = {}) => {
   const content = fs.readFileSync(path, { encoding });
 
-  const a = dotenv.parse(content, dotEnvOptions);
+  const envRaw = dotenv.parse(content, dotEnvOptions);
+  const env: any = dotenvExpand({ ignoreProcessEnv: true, parsed: envRaw } as any).parsed;
 
-  return Object.entries(a).map(([name, value]) => ({ name, value }));
+  return Object.entries(env).map(([name, value]) => ({ name, value }));
 };

@@ -19,6 +19,7 @@
     "@octokit/rest": "^16.43.1",
     "commander": "^4.1.1",
     "dotenv": "^8.2.0",
+    "dotenv-expand": "^5.1.0",
     "tweetnacl-util": "^0.15.1",
     "tweetsodium": "^0.0.4"
   },
