@@ -15,6 +15,7 @@
     "dotenv",
     ".env"
   ],
+  "license": "MIT",
   "dependencies": {
     "@octokit/rest": "^17.1.0",
     "commander": "^5.0.0",

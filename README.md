@@ -37,3 +37,7 @@ github-secret \
   --delete
   # When set, remove all secrets that are not in the .env
 ```
+
+# License
+
+[MIT](./LICENSE)
