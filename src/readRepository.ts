@@ -1,4 +1,3 @@
-import fs from "fs";
 import path from "path";
 
 export const parsePackageJson = (
@@ -28,8 +27,7 @@ export const readPackageJson = (cwd = "") => {
   const fileName = path.resolve(cwd, "package.json");
 
   try {
-    const content = fs.readFileSync(fileName).toString();
-    const pkg = JSON.parse(content);
+    const pkg = require(fileName);
 
     return parsePackageJson(pkg);
   } catch (err) {}
