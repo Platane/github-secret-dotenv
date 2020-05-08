@@ -20,7 +20,7 @@ it("update secret", async () => {
 
   {
     const secrets = await listSecrets({ owner, repo, accessToken });
-    const secret = secrets.find(x => x.name === "XXX_TEST");
+    const secret = secrets.find((x) => x.name === "XXX_TEST");
     expect(secret).toBeDefined();
     expect(secret && secret.updated_at).toBeGreaterThan(now - 1000);
   }
@@ -35,7 +35,7 @@ it("remove secret", async () => {
 
   {
     const secrets = await listSecrets({ owner, repo, accessToken });
-    const secret = secrets.find(x => x.name === "YYY_TEST");
+    const secret = secrets.find((x) => x.name === "YYY_TEST");
     expect(secret).toBeDefined();
   }
 
@@ -43,7 +43,7 @@ it("remove secret", async () => {
 
   {
     const secrets = await listSecrets({ owner, repo, accessToken });
-    const secret = secrets.find(x => x.name === "YYY_TEST");
+    const secret = secrets.find((x) => x.name === "YYY_TEST");
     expect(secret).toBeUndefined();
   }
 });

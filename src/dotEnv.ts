@@ -12,13 +12,13 @@ export const readEnv = ({
   const envRaw = dotenv.parse(content, dotEnvOptions);
   const envExpanded = dotenvExpand({
     ignoreProcessEnv: true,
-    parsed: envRaw
+    parsed: envRaw,
   } as any).parsed;
 
   const env = envExpanded || envRaw;
 
   return Object.entries(env).map(([name, value]) => ({
     name,
-    value: value as string
+    value: value as string,
   }));
 };

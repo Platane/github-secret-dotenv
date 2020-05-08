@@ -57,7 +57,7 @@ const parseOptions = (options: {
     repo,
     accessToken,
     dotEnvFilename: options.dotEnvFilename,
-    delete: options.delete
+    delete: options.delete,
   };
 };
 
@@ -79,7 +79,7 @@ const upload = async (options: any) => {
   const upload = createSecretUpdater({
     owner,
     repo,
-    accessToken
+    accessToken,
   });
 
   await Promise.all(
@@ -95,8 +95,8 @@ const upload = async (options: any) => {
 
     await Promise.all(
       secrets
-        .filter(s => !env.some(e => e.name === s.name))
-        .map(s =>
+        .filter((s) => !env.some((e) => e.name === s.name))
+        .map((s) =>
           removeSecret({ owner, repo, accessToken }, s.name).then(() =>
             console.log(`  ✔   ${s.name} removed`)
           )
