@@ -1,7 +1,7 @@
 import path from "path";
 
 export const parsePackageJson = (
-  pkg
+  pkg: any
 ): { owner: string; repo: string } | undefined => {
   {
     const repositoryUrl =

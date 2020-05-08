@@ -1,52 +1,76 @@
 import { Octokit } from "@octokit/rest";
 import { encrypt } from "./encrypt";
 
-export const listSecrets = async ({ owner, repo, accessToken }) => {
+export const listSecrets = async ({
+  owner,
+  repo,
+  accessToken,
+}: {
+  owner: string;
+  repo: string;
+  accessToken: string;
+}) => {
   const octokit = new Octokit({
-    auth: accessToken
+    auth: accessToken,
   });
 
   const { data } = await octokit.actions.listSecretsForRepo({
     per_page: 100,
     owner,
-    repo
+    repo,
   });
 
-  return data.secrets.map(x => ({
+  return data.secrets.map((x) => ({
     name: x.name,
     created_at: new Date(x.created_at).getTime(),
-    updated_at: new Date(x.updated_at).getTime()
+    updated_at: new Date(x.updated_at).getTime(),
   }));
 };
 
 export const removeSecret = async (
-  { owner, repo, accessToken },
+  {
+    owner,
+    repo,
+    accessToken,
+  }: {
+    owner: string;
+    repo: string;
+    accessToken: string;
+  },
   name: string
 ) => {
   const octokit = new Octokit({
-    auth: accessToken
+    auth: accessToken,
   });
 
   await octokit.actions.deleteSecretFromRepo({
     owner,
     repo,
-    name
+    name,
   });
 };
 
-export const createSecretUpdater = ({ owner, repo, accessToken }) => {
+export const createSecretUpdater = ({
+  owner,
+  repo,
+  accessToken,
+}: {
+  owner: string;
+  repo: string;
+  accessToken: string;
+}) => {
   const octokit = new Octokit({
-    auth: accessToken
+    auth: accessToken,
   });
 
   const p = octokit.actions.getPublicKey({
     owner,
-    repo
+    repo,
   });
 
   return async (name: string, value: string) => {
     const {
-      data: { key, key_id }
+      data: { key, key_id },
     } = await p;
 
     const encrypted_value = encrypt(key, value);
@@ -56,7 +80,7 @@ export const createSecretUpdater = ({ owner, repo, accessToken }) => {
       repo,
       name,
       key_id,
-      encrypted_value
+      encrypted_value,
     });
   };
 };

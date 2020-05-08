@@ -19,6 +19,6 @@ export const readEnv = ({
 
   return Object.entries(env).map(([name, value]) => ({
     name,
-    value
+    value: value as string
   }));
 };
