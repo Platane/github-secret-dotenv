@@ -4,6 +4,7 @@ import { readEnv } from "./dotEnv";
 import program from "commander";
 import { readPackageJson } from "./readRepository";
 import chalk from "chalk";
+import { createPrompt, State } from "./prompt";
 
 program
   .name("github-secret")
@@ -76,6 +77,28 @@ const upload = async (options: any) => {
 
   console.log(`uploading secrets to ${chalk.yellow(owner + "/" + repo)}`);
 
+  const currentSecrets = o.delete
+    ? await listSecrets({ owner, repo, accessToken })
+    : [];
+
+  const state: State = {
+    items: [
+      ...env.map(
+        ({ name, value }) =>
+          ({ name, value, status: "pending", action: "set" } as const)
+      ),
+
+      ...currentSecrets
+        .filter((s) => !env.some((e) => e.name === s.name))
+        .map(
+          ({ name }) => ({ name, status: "pending", action: "remove" } as const)
+        ),
+    ],
+  };
+
+  const p = createPrompt();
+  p.update(state);
+
   const upload = createSecretUpdater({
     owner,
     repo,
@@ -83,26 +106,23 @@ const upload = async (options: any) => {
   });
 
   await Promise.all(
-    env.map(({ name, value }) =>
-      upload(name, value).then(() => console.log(`  ✔   ${name} updated`))
-    )
+    state.items.map(async (i) => {
+      try {
+        if (i.action === "set") await upload(i.name, i.value);
+        if (i.action === "remove")
+          await removeSecret({ owner, repo, accessToken }, i.name);
+
+        i.status = "done";
+      } catch (error) {
+        i.status = "error";
+        i.error = error;
+      }
+
+      p.update(state);
+    })
   );
 
-  if (o.delete) {
-    console.log("");
-
-    const secrets = await listSecrets({ owner, repo, accessToken });
-
-    await Promise.all(
-      secrets
-        .filter((s) => !env.some((e) => e.name === s.name))
-        .map((s) =>
-          removeSecret({ owner, repo, accessToken }, s.name).then(() =>
-            console.log(`  ✔   ${s.name} removed`)
-          )
-        )
-    );
-  }
+  p.dispose();
 };
 
 upload(program.parse(process.argv));
