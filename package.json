@@ -18,7 +18,7 @@
   "license": "MIT",
   "dependencies": {
     "@inquirer/core": "0.0.9-alpha.0",
-    "@octokit/rest": "17.8.0",
+    "@octokit/rest": "17.9.2",
     "cli-spinners": "2.3.0",
     "commander": "5.1.0",
     "dotenv": "8.2.0",

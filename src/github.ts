@@ -14,7 +14,7 @@ export const listSecrets = async ({
     auth: accessToken,
   });
 
-  const { data } = await octokit.actions.listSecretsForRepo({
+  const { data } = await octokit.actions.listRepoSecrets({
     per_page: 100,
     owner,
     repo,
@@ -43,10 +43,10 @@ export const removeSecret = async (
     auth: accessToken,
   });
 
-  await octokit.actions.deleteSecretFromRepo({
+  await octokit.actions.deleteRepoSecret({
     owner,
     repo,
-    name,
+    secret_name: name,
   });
 };
 
@@ -63,7 +63,7 @@ export const createSecretUpdater = ({
     auth: accessToken,
   });
 
-  const p = octokit.actions.getPublicKey({
+  const p = octokit.actions.getRepoPublicKey({
     owner,
     repo,
   });
@@ -75,10 +75,10 @@ export const createSecretUpdater = ({
 
     const encrypted_value = encrypt(key, value);
 
-    await octokit.actions.createOrUpdateSecretForRepo({
+    await octokit.actions.createOrUpdateRepoSecret({
       owner,
       repo,
-      name,
+      secret_name: name,
       key_id,
       encrypted_value,
     });
