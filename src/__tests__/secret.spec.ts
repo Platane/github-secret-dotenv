@@ -3,6 +3,10 @@ import { owner, repo, accessToken } from "../__fixtures__/repository";
 
 jest.setTimeout(10000);
 
+it("should have defined access token (otherwise tests below will fail)", () => {
+  expect(accessToken).toBeDefined();
+});
+
 it("list secrets", async () => {
   const secrets = await listSecrets({ owner, repo, accessToken });
 
