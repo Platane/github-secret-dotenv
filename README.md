@@ -38,6 +38,12 @@ github-secret \
   # When set, remove all secrets that are not in the .env
 ```
 
+or without the package installed
+
+```
+npx github-secret-dotenv
+```
+
 # License
 
 [MIT](./LICENSE)
