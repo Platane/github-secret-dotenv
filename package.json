@@ -1,6 +1,6 @@
 {
   "name": "github-secret-dotenv",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "upload secrets to github from your .env file",
   "repository": "github:platane/github-secret-dotenv",
   "author": {
