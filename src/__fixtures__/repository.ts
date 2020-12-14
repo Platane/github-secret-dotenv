@@ -1,5 +1,5 @@
 require("dotenv").config();
-import { readPackageJson } from "../readRepository";
+import { readPackageJson } from "../readPackageJson";
 
 const m = readPackageJson() as any;
 

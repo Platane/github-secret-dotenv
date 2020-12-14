@@ -1,4 +1,4 @@
-import { readPackageJson, parsePackageJson } from "../readRepository";
+import { readPackageJson, parsePackageJson } from "../readPackageJson";
 import path from "path";
 
 it("parse from repository.url", async () => {

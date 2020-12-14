@@ -1,5 +1,24 @@
 import path from "path";
 
+/**
+ * read the package.json from the package directory
+ * guess the github owner / repository from it
+ */
+export const readPackageJson = (packageDir = "") => {
+  const fileName = path.resolve(packageDir, "package.json");
+
+  try {
+    const pkg = require(fileName);
+
+    return parsePackageJson(pkg);
+  } catch (err) {}
+};
+
+/**
+ * guess the github owner / repository from a package json file
+ * either get it from the repository field
+ * or author + name
+ */
 export const parsePackageJson = (
   pkg: any
 ): { owner: string; repo: string } | undefined => {
@@ -21,14 +40,4 @@ export const parsePackageJson = (
 
   if (typeof authorName === "string" && typeof pkg.name === "string")
     return { owner: authorName, repo: pkg.name };
-};
-
-export const readPackageJson = (cwd = "") => {
-  const fileName = path.resolve(cwd, "package.json");
-
-  try {
-    const pkg = require(fileName);
-
-    return parsePackageJson(pkg);
-  } catch (err) {}
 };
