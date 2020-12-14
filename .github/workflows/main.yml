@@ -1,14 +1,14 @@
 name: main
 
-on: [push, pull_request]
+on: [push]
 
 jobs:
   test:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v1
-      - uses: actions/setup-node@v1
+      - uses: actions/checkout@v2.3.3
+      - uses: actions/setup-node@v1.4.4
         with:
           node-version: 12
       - run: yarn install --frozen-lockfile
@@ -17,9 +17,13 @@ jobs:
       - run: yarn test --ci
         env:
           GITHUB_ACCESS_TOKEN: ${{ secrets.MY_GITHUB_ACCESS_TOKEN }}
+      - run: yarn dev upload
+        env:
+          GITHUB_ACCESS_TOKEN: ${{ secrets.MY_GITHUB_ACCESS_TOKEN }}
 
   print-secret:
     runs-on: ubuntu-latest
+    needs: test
 
     steps:
       - name: check current secret XXX_TEST
@@ -31,3 +35,22 @@ jobs:
         run: echo $YYY_TEST | tr a-z A-Z
         env:
           YYY_TEST: ${{ secrets.YYY_TEST }}
+
+  publish-npm:
+    runs-on: ubuntu-latest
+    needs: test
+
+    steps:
+      - uses: actions/checkout@v2.3.3
+      - uses: actions/setup-node@v1.4.4
+        with:
+          node-version: 12
+
+      - run: yarn install --frozen-lockfile
+      - run: yarn build
+      - run: mkdir npm-dist ; cp -r CHANGELOG.md README.md package.json yarn.lock lib/ npm-dist/
+      - uses: JS-DevTools/npm-publish@v1.4.0
+        if: success() && github.ref == 'refs/heads/master'
+        with:
+          token: ${{ secrets.NPM_TOKEN }}
+          package: npm-dist/package.json
