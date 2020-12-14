@@ -7,7 +7,7 @@
 
 > Upload secrets to github from your .env file
 
-![terminal screenshot](https://raw.githubusercontent.com/Platane/github-secret-dotenv/master/doc/terminal-screenshot.jpg)
+![terminal screenshot](./doc/terminal-screenshot.png)
 
 # Install
 
@@ -18,7 +18,7 @@ npm install -g github-secret-dotenv
 # Usage
 
 ```sh
-github-secret \
+github-secret-dotenv \
 
   --repository platane/github-secret-dotenv \
   # The github repository (<owner>/<repo>)
