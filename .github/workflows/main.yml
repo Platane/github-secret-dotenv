@@ -62,7 +62,7 @@ jobs:
         with:
           name: env-test
 
-      - name: check uploaded secret (notice that secret are usually not updated until the next run)
+      - name: check uploaded secret XXX_TEST (notice that secret are usually not updated until the next run)
         run: cat .env.test | cut -d= -f2
 
   test-package:
