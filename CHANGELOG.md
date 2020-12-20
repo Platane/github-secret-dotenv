@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+### v1.1.2
+
+- 🔨 exit with non 0 code on error
+- 🚀 drop support for node before 12
+- 👷 test package before publishing
+
 ### v1.1.1
 
 - 🔨 fix package.json path to binary
