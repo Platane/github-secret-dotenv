@@ -54,7 +54,7 @@ jobs:
     needs: test-and-build
     steps:
       - name: check current secret XXX_TEST
-        run: echo "x.${XXX_TEST:1}"
+        run: echo "${XXX_TEST:0:1}.${XXX_TEST:1}"
         env:
           XXX_TEST: ${{ secrets.XXX_TEST }}
 
