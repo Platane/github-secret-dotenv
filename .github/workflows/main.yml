@@ -105,6 +105,7 @@ jobs:
           echo $NEW_VERSION - $NPM_VERSION
 
           if [ "$NEW_VERSION" != "$NPM_VERSION" ]; then
+            echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" > .npmrc
             npm publish ./github-secret-dotenv.tgz
           fi
         if: success() && github.ref == 'refs/heads/master'
