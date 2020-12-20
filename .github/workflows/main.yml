@@ -97,7 +97,16 @@ jobs:
         with:
           node-version: 12
 
-      - run: npm publish github-secret-dotenv.tgz
+      - name: npm publish
+        run: |
+          export NEW_VERSION=$(tar -zxvOf ./github-secret-dotenv.tgz package/package.json | grep '"version"' | cut -d'"' -f4)
+          export NPM_VERSION=$(npm info github-secret-dotenv version)
+
+          echo $NEW_VERSION - $NPM_VERSION
+
+          if [ "$NEW_VERSION" != "$NPM_VERSION" ]; then
+            npm publish ./github-secret-dotenv.tgz
+          fi
         if: success() && github.ref == 'refs/heads/master'
         env:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
