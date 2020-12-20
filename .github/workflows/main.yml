@@ -43,7 +43,7 @@ jobs:
           name: env-test
           path: .env.test
 
-  check-env-after-test:
+  check-secret-after-test:
     runs-on: ubuntu-latest
     needs: test
     steps:
@@ -52,9 +52,10 @@ jobs:
           name: env-test
       - name: check current secret XXX_TEST
         run: |
-          cat .env.test
-          echo $XXX_TEST | tr a-z A-Z
-          if [ "XXX_TEST=$XXX_TEST" == "$(cat .env.test)" ]; then
+          XXX_TEST_UPLOADED=$(cat .env.test | cut -d= -f2)
+          echo "upload: $XXX_TEST_UPLOADED, in secret: x.${XXX_TEST:1}"
+
+          if [ "$XXX_TEST_UPLOADED" != "$XXX_TEST" ]; then
             exit 1
           fi
         env:
