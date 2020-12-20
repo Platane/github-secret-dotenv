@@ -71,7 +71,7 @@ jobs:
         os: [ubuntu-latest, macos-latest]
         node: [12]
     runs-on: ${{ matrix.os }}
-    needs: test-build
+    needs: test-and-build
 
     steps:
       - uses: actions/download-artifact@v2
