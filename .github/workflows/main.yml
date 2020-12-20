@@ -30,6 +30,7 @@ jobs:
           export XXX_TEST=xxxtest$RANDOM
           echo "XXX_TEST=$XXX_TEST" >> .env.test
           echo "::set-output name=xxx_test::$(echo $XXX_TEST)"
+          cat .env.test
 
           # the command should not read this env var, only the content of the .env file
           export XXX_TEST=leak
