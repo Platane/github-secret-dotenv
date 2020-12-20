@@ -71,4 +71,7 @@ p.command("list")
     });
   });
 
-program.parse(process.argv);
+program.parseAsync(process.argv).catch((error) => {
+  console.error(error.name, error.message);
+  process.exit(1);
+});
