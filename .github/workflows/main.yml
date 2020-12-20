@@ -78,12 +78,16 @@ jobs:
           token: ${{ secrets.NPM_TOKEN }}
 
   test-npm-package:
-    runs-on: macos-latest
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+        node: [12]
+    runs-on: ${{ matrix.os }}
     needs: publish-npm
     steps:
       - uses: actions/setup-node@v1.4.4
         with:
-          node-version: 12
+          node-version: ${{ matrix.node }}
       - run: yarn add github-secret-dotenv
       - run: yarn github-secret-dotenv list --repository platane/github-secret-dotenv
         env:
