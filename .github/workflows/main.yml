@@ -80,7 +80,7 @@ jobs:
 
       - run: npm publish github-secret-dotenv.tgz
         if: success() && github.ref == 'refs/heads/master'
-        with:
+        env:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
 
   test-package:
