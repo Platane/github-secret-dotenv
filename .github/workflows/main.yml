@@ -17,24 +17,40 @@ jobs:
       - run: yarn test --ci
         env:
           GITHUB_ACCESS_TOKEN: ${{ secrets.MY_GITHUB_ACCESS_TOKEN }}
-      - run: yarn dev list
+
+      - name: test list command
+        run: yarn dev list
         env:
           GITHUB_ACCESS_TOKEN: ${{ secrets.MY_GITHUB_ACCESS_TOKEN }}
 
-  print-secret:
+      - name: test upload command
+        id: env-test
+        run: |
+          # generate a .env.test with a random XXX_TEST value
+          export XXX_TEST=xxxtest$RANDOM
+          echo "XXX_TEST=$XXX_TEST" >> .env.test
+          echo "::set-output name=xxx_test::$(echo $XXX_TEST)"
+
+          # the command should not read this env var, only the content of the .env file
+          export XXX_TEST=leak
+
+          yarn dev upload -e ./.env.test
+        env:
+          GITHUB_ACCESS_TOKEN: ${{ secrets.MY_GITHUB_ACCESS_TOKEN }}
+
+  check-env-after-test:
     runs-on: ubuntu-latest
     needs: test
-
     steps:
       - name: check current secret XXX_TEST
-        run: echo $XXX_TEST | tr a-z A-Z
+        run: |
+          echo "in .env.test $( echo $XXX_TEST_REF | tr a-z A-Z ), in secret: $( echo $XXX_TEST | tr a-z A-Z )"
+          if [ "$XXX_TEST" == "$XXX_TEST_REF" ]; then
+            exit 1
+          fi
         env:
           XXX_TEST: ${{ secrets.XXX_TEST }}
-
-      - name: check current secret YYY_TEST
-        run: echo $YYY_TEST | tr a-z A-Z
-        env:
-          YYY_TEST: ${{ secrets.YYY_TEST }}
+          XXX_TEST_REF: ${{ steps.env-test.outputs.xxx_test }}
 
   publish-npm:
     runs-on: ubuntu-latest
