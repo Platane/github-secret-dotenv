@@ -37,6 +37,9 @@
     "ts-node": "9.1.1",
     "typescript": "4.1.3"
   },
+  "engines": {
+    "node": ">12"
+  },
   "bin": {
     "github-secret": "./lib/cli/bin",
     "github-secret-dotenv": "./lib/cli/bin"
