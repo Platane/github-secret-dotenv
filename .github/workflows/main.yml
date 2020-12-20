@@ -11,7 +11,7 @@ jobs:
       - uses: actions/setup-node@v1.4.4
         with:
           node-version: 12
-      - run: yarn install --frozen-lockfile
+      - uses: bahmutov/npm-install@v1.6.2
       - run: yarn type
       - run: yarn lint
       - run: yarn test --ci
@@ -62,8 +62,7 @@ jobs:
       - uses: actions/setup-node@v1.4.4
         with:
           node-version: 12
-
-      - run: yarn install --frozen-lockfile
+      - uses: bahmutov/npm-install@v1.6.2
       - run: yarn build
       - uses: JS-DevTools/npm-publish@v1.4.0
         if: success() && github.ref == 'refs/heads/master'
@@ -78,6 +77,6 @@ jobs:
         with:
           node-version: 12
       - run: yarn add github-secret-dotenv
-      - run: yarn github-secret-dotenv list
+      - run: yarn github-secret-dotenv list --repository platane/github-secret-dotenv
         env:
           GITHUB_ACCESS_TOKEN: ${{ secrets.MY_GITHUB_ACCESS_TOKEN }}
