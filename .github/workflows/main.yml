@@ -24,12 +24,11 @@ jobs:
           GITHUB_ACCESS_TOKEN: ${{ secrets.MY_GITHUB_ACCESS_TOKEN }}
 
       - name: test upload command
-        id: env-test
         run: |
           # generate a .env.test with a random XXX_TEST value
           export XXX_TEST=xxxtest$RANDOM
           echo "XXX_TEST=$XXX_TEST" >> .env.test
-          echo "::set-output name=xxx_test::$(echo $XXX_TEST)"
+          echo "::set-output name=xxx-test::$(echo $XXX_TEST)"
           cat .env.test
 
           # the command should not read this env var, only the content of the .env file
@@ -39,19 +38,27 @@ jobs:
         env:
           GITHUB_ACCESS_TOKEN: ${{ secrets.MY_GITHUB_ACCESS_TOKEN }}
 
+      - uses: actions/upload-artifact@v2
+        with:
+          name: env-test
+          path: .env.test
+
   check-env-after-test:
     runs-on: ubuntu-latest
     needs: test
     steps:
+      - uses: actions/download-artifact@v2
+        with:
+          name: env-test
       - name: check current secret XXX_TEST
         run: |
-          echo "in .env.test $( echo $XXX_TEST_REF | tr a-z A-Z ), in secret: $( echo $XXX_TEST | tr a-z A-Z )"
-          if [ "$XXX_TEST" == "$XXX_TEST_REF" ]; then
+          cat .env.test
+          echo $XXX_TEST | tr a-z A-Z
+          if [ "XXX_TEST=$XXX_TEST" == "$(cat .env.test)" ]; then
             exit 1
           fi
         env:
           XXX_TEST: ${{ secrets.XXX_TEST }}
-          XXX_TEST_REF: ${{ steps.env-test.outputs.xxx_test }}
 
   publish-npm:
     runs-on: ubuntu-latest
