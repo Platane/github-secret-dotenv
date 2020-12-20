@@ -37,7 +37,7 @@ jobs:
           GITHUB_ACCESS_TOKEN: ${{ secrets.MY_GITHUB_ACCESS_TOKEN }}
 
       - run: yarn build
-      - run: yarn pack; mv github-secret-dotenv-*.tgz github-secret-dotenv.tgz
+      - run: npm pack; mv github-secret-dotenv-*.tgz github-secret-dotenv.tgz
 
       - uses: actions/upload-artifact@v2
         with:
@@ -65,6 +65,27 @@ jobs:
       - name: check uploaded secret (notice that secret are usually not updated until the next run)
         run: cat .env.test | cut -d= -f2
 
+  test-package:
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+        node: [12]
+    runs-on: ${{ matrix.os }}
+    needs: test-build
+
+    steps:
+      - uses: actions/upload-artifact@v2
+        with:
+          name: package
+          path: github-secret-dotenv.tgz
+      - uses: actions/setup-node@v1.4.4
+        with:
+          node-version: ${{ matrix.node }}
+      - run: npm install ./github-secret-dotenv.tgz
+      - run: npx --no-install github-secret-dotenv list --repository platane/github-secret-dotenv
+        env:
+          GITHUB_ACCESS_TOKEN: ${{ secrets.MY_GITHUB_ACCESS_TOKEN }}
+
   publish-npm:
     runs-on: ubuntu-latest
     needs: test-package
@@ -82,24 +103,3 @@ jobs:
         if: success() && github.ref == 'refs/heads/master'
         env:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-
-  test-package:
-    strategy:
-      matrix:
-        os: [ubuntu-latest, macos-latest]
-        node: [12]
-    runs-on: ${{ matrix.os }}
-    needs: test-build
-
-    steps:
-      - uses: actions/upload-artifact@v2
-        with:
-          name: package
-          path: github-secret-dotenv.tgz
-      - uses: actions/setup-node@v1.4.4
-        with:
-          node-version: ${{ matrix.node }}
-      - run: yarn add ./github-secret-dotenv.tgz
-      - run: yarn github-secret-dotenv list --repository platane/github-secret-dotenv
-        env:
-          GITHUB_ACCESS_TOKEN: ${{ secrets.MY_GITHUB_ACCESS_TOKEN }}
