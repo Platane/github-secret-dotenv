@@ -48,9 +48,7 @@ jobs:
 
       - run: yarn install --frozen-lockfile
       - run: yarn build
-      - run: mkdir npm-dist ; cp -r CHANGELOG.md README.md package.json yarn.lock lib/ npm-dist/
       - uses: JS-DevTools/npm-publish@v1.4.0
         if: success() && github.ref == 'refs/heads/master'
         with:
           token: ${{ secrets.NPM_TOKEN }}
-          package: npm-dist/package.json

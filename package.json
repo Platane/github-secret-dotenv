@@ -41,6 +41,9 @@
     "github-secret": "./lib/cli/bin",
     "github-secret-dotenv": "./lib/cli/bin"
   },
+  "files": [
+    "lib/**/*.*"
+  ],
   "scripts": {
     "type": "tsc --noEmit",
     "test": "YYY_TEST=leak jest --verbose",
