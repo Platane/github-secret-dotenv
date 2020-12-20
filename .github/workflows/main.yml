@@ -69,3 +69,15 @@ jobs:
         if: success() && github.ref == 'refs/heads/master'
         with:
           token: ${{ secrets.NPM_TOKEN }}
+
+  test-npm-package:
+    runs-on: macos-latest
+    needs: publish-npm
+    steps:
+      - uses: actions/setup-node@v1.4.4
+        with:
+          node-version: 12
+      - run: yarn add github-secret-dotenv
+      - run: yarn github-secret-dotenv list
+        env:
+          GITHUB_ACCESS_TOKEN: ${{ secrets.MY_GITHUB_ACCESS_TOKEN }}
