@@ -9,16 +9,12 @@
 
 ![terminal screenshot](./doc/terminal-screenshot.png)
 
-# Install
-
-```sh
-npm install -g github-secret-dotenv
-```
-
 # Usage
 
+## cli
+
 ```sh
-github-secret-dotenv \
+npx github-secret-dotenv \
 
   --repository platane/github-secret-dotenv \
   # The github repository (<owner>/<repo>)
@@ -38,10 +34,26 @@ github-secret-dotenv \
   # When set, remove all secrets that are not in the .env
 ```
 
-or without the package installed
+## node api
 
-```
-npx github-secret-dotenv
+```typescript
+import { readAndUpload, createSecretUpdater } from "github-secret-dotenv";
+
+// upload the content of .env as secrets for the github repository
+await readAndUpload({
+  owner: "platane",
+  repo: "github-secret-dotenv",
+  githubAccessToken: "xxxx",
+  dotEnvFilename: ".env",
+});
+
+// upload arbitrary secret to the github repository
+const updateSecret = createSecretUpdater({
+  owner: "platane",
+  repo: "github-secret-dotenv",
+  githubAccessToken: "xxxx",
+});
+updateSecret("MY_SECRET", "XXXX");
 ```
 
 # License
