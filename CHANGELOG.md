@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+### v1.1.3
+
+- 🚀 expose node api
+- 🚀 generate typedef
+- 🔨 fix "list" command when a template file already exists
+- 📓 minor refactoring, and comments
+
 ### v1.1.2
 
 - 🔨 exit with non 0 code on error
