@@ -8,17 +8,13 @@ export const parseOptions = (options: {
   dotEnvTemplateFilename?: string;
   delete?: boolean;
 }) => {
-  let owner: string | undefined,
-    repo: string | undefined,
-    accessToken = options.githubAccessToken;
-
-  if (!accessToken && process.env.GITHUB_ACCESS_TOKEN) {
-    accessToken = process.env.GITHUB_ACCESS_TOKEN;
-  }
+  let owner: string | undefined;
+  let repo: string | undefined;
+  let githubAccessToken =
+    options.githubAccessToken || process.env.GITHUB_ACCESS_TOKEN;
 
   if (options.repository) {
-    owner = options.repository.split("/")[0];
-    repo = options.repository.split("/")[1];
+    [owner, repo] = options.repository.split("/");
   }
 
   if (!repo) {
@@ -33,7 +29,7 @@ export const parseOptions = (options: {
   return {
     owner,
     repo,
-    accessToken,
+    githubAccessToken,
     dotEnvFilename: options.dotEnvFilename,
     dotEnvTemplateFilename: options.dotEnvTemplateFilename,
     delete: options.delete,

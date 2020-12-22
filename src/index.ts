@@ -1,14 +1,18 @@
+export * from "./github";
+
 import { createSecretUpdater } from "./github";
 import { readEnv } from "./dotEnv";
 
-export const readAndUpload = async (
-  options: {
-    owner: string;
-    repo: string;
-    accessToken: string;
-  } & Parameters<typeof readEnv>[0]
-) => {
-  const env = readEnv(options);
+/**
+ * read the content of a .env file and upload the content as github secret
+ */
+export const readAndUpload = async (options: {
+  owner: string;
+  repo: string;
+  githubAccessToken: string;
+  dotEnvFilename: string;
+}) => {
+  const env = readEnv({ path: options.dotEnvFilename });
 
   const upload = createSecretUpdater(options);
 

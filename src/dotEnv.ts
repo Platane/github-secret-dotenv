@@ -15,9 +15,11 @@ export const readEnv = ({
 
   const envRaw = dotenv.parse(content, dotEnvOptions);
   const envExpanded = dotenvExpand({
-    ignoreProcessEnv: true,
     parsed: envRaw,
-  } as any).parsed;
+
+    // workaround until dotenv-expand fixes its typedef https://github.com/motdotla/dotenv-expand/pull/38
+    ...({ ignoreProcessEnv: true } as any),
+  }).parsed;
 
   const env = envExpanded || envRaw;
 

@@ -6,14 +6,14 @@ import { createPrompt } from "./prompt";
 export const upload = async ({
   owner,
   repo,
-  accessToken,
+  githubAccessToken,
   dotEnvFilename,
   deleteUnListed,
 }: {
   deleteUnListed: boolean;
   owner: string;
   repo: string;
-  accessToken: string;
+  githubAccessToken: string;
   dotEnvFilename: string;
 }) => {
   console.log(`reading secrets from ${chalk.yellow(dotEnvFilename)}`);
@@ -23,7 +23,7 @@ export const upload = async ({
   console.log(`uploading secrets to ${chalk.yellow(owner + "/" + repo)}`);
 
   const currentSecrets = deleteUnListed
-    ? await listSecrets({ owner, repo, accessToken })
+    ? await listSecrets({ owner, repo, githubAccessToken })
     : [];
 
   const state: State = {
@@ -46,7 +46,7 @@ export const upload = async ({
   const upload = createSecretUpdater({
     owner,
     repo,
-    accessToken,
+    githubAccessToken,
   });
 
   await Promise.all(
@@ -54,7 +54,7 @@ export const upload = async ({
       try {
         if (i.action === "set") await upload(i.name, i.value);
         if (i.action === "remove")
-          await removeSecret({ owner, repo, accessToken }, i.name);
+          await removeSecret({ owner, repo, githubAccessToken }, i.name);
 
         i.status = "done";
       } catch (error) {

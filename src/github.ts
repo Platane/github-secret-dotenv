@@ -4,14 +4,14 @@ import { encrypt } from "./encrypt";
 export const listSecrets = async ({
   owner,
   repo,
-  accessToken,
+  githubAccessToken,
 }: {
   owner: string;
   repo: string;
-  accessToken: string;
+  githubAccessToken: string;
 }) => {
   const octokit = new Octokit({
-    auth: accessToken,
+    auth: githubAccessToken,
   });
 
   const { data } = await octokit.actions.listRepoSecrets({
@@ -31,56 +31,61 @@ export const removeSecret = async (
   {
     owner,
     repo,
-    accessToken,
+    githubAccessToken,
   }: {
     owner: string;
     repo: string;
-    accessToken: string;
+    githubAccessToken: string;
   },
-  name: string
+  secretName: string
 ) => {
   const octokit = new Octokit({
-    auth: accessToken,
+    auth: githubAccessToken,
   });
 
   await octokit.actions.deleteRepoSecret({
     owner,
     repo,
-    secret_name: name,
+    secret_name: secretName,
   });
 };
 
+/**
+ * returns a function that can be used to set repository secret
+ */
 export const createSecretUpdater = ({
   owner,
   repo,
-  accessToken,
+  githubAccessToken,
 }: {
   owner: string;
   repo: string;
-  accessToken: string;
+  githubAccessToken: string;
 }) => {
   const octokit = new Octokit({
-    auth: accessToken,
+    auth: githubAccessToken,
   });
 
-  const p = octokit.actions.getRepoPublicKey({
+  const publicKeyPromise = octokit.actions.getRepoPublicKey({
     owner,
     repo,
   });
 
-  return async (name: string, value: string) => {
+  const updateSecret = async (secretName: string, secretValue: string) => {
     const {
       data: { key, key_id },
-    } = await p;
+    } = await publicKeyPromise;
 
-    const encrypted_value = encrypt(key, value);
+    const encrypted_value = encrypt(key, secretValue);
 
     await octokit.actions.createOrUpdateRepoSecret({
       owner,
       repo,
-      secret_name: name,
+      secret_name: secretName,
       key_id,
       encrypted_value,
     });
   };
+
+  return updateSecret;
 };

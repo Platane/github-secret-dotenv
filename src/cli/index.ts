@@ -12,7 +12,7 @@ const githubAccessTokenOption = [
   "Your github access token\nIf omitted, read it from GITHUB_ACCESS_TOKEN env var\nGenerate one from https://github.com/settings/tokens/new\nMust have permissions [public_repo  read:public_key]",
 ] as const;
 
-const p = program.name("github-secret");
+const p = program.name("github-secret-dotenv");
 
 p.command("upload", { isDefault: true })
   .description("Upload secrets to github from your .env file.")
@@ -28,19 +28,19 @@ p.command("upload", { isDefault: true })
     const {
       owner,
       repo,
-      accessToken,
+      githubAccessToken,
       dotEnvFilename,
       delete: deleteUnListed,
     } = parseOptions(rawOptions);
 
     if (!owner || !repo) throw new Error("undefined repository");
 
-    if (!accessToken) throw new Error("undefined github access token");
+    if (!githubAccessToken) throw new Error("undefined github access token");
 
     await upload({
       owner,
       repo,
-      accessToken,
+      githubAccessToken,
       dotEnvFilename: dotEnvFilename!,
       deleteUnListed: deleteUnListed!,
     });
@@ -55,18 +55,21 @@ p.command("list")
     "Write secrets names in a .env template file"
   )
   .action(async (rawOptions) => {
-    const { owner, repo, accessToken, dotEnvTemplateFilename } = parseOptions(
-      rawOptions
-    );
+    const {
+      owner,
+      repo,
+      githubAccessToken,
+      dotEnvTemplateFilename,
+    } = parseOptions(rawOptions);
 
     if (!owner || !repo) throw new Error("undefined repository");
 
-    if (!accessToken) throw new Error("undefined github access token");
+    if (!githubAccessToken) throw new Error("undefined github access token");
 
     await list({
       owner,
       repo,
-      accessToken,
+      githubAccessToken,
       dotEnvTemplateFilename,
     });
   });

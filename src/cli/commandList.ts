@@ -6,17 +6,17 @@ import { listSecrets } from "../github";
 export const list = async ({
   owner,
   repo,
-  accessToken,
+  githubAccessToken,
   dotEnvTemplateFilename,
 }: {
   owner: string;
   repo: string;
-  accessToken: string;
+  githubAccessToken: string;
   dotEnvTemplateFilename?: string;
 }) => {
   console.log(`reading secrets from ${chalk.yellow(owner + "/" + repo)}`);
 
-  const secrets = await listSecrets({ owner, repo, accessToken });
+  const secrets = await listSecrets({ owner, repo, githubAccessToken });
 
   console.log(secrets.map(({ name }) => name).join("\n"));
 
@@ -31,13 +31,14 @@ export const list = async ({
 
     const originalEnv = dotenv.parse(originalEnvContent);
 
-    const content =
-      originalEnvContent +
-      "\n" +
-      secrets
-        .filter(({ name }) => !originalEnv[name])
-        .map(({ name }) => `${name}=`)
-        .join("\n");
+    const content = [
+      originalEnvContent,
+      ...secrets
+        .filter(({ name }) => !(name in originalEnv))
+        .map(({ name }) => `${name}=`),
+    ]
+      .filter(Boolean)
+      .join("\n");
 
     fs.writeFileSync(dotEnvTemplateFilename, content);
 
