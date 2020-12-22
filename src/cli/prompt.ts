@@ -1,8 +1,7 @@
-import chalk from "chalk";
 import readline from "readline";
+import type IScreenManager from "inquirer/lib/utils/screen-manager";
 // @ts-ignore
 import ScreenManager from "@inquirer/core/lib/screen-manager";
-// @ts-ignore
 import MuteStream from "mute-stream";
 import cliSpinners from "cli-spinners";
 
@@ -17,7 +16,7 @@ export const createPrompt = (render: (spinner: string) => string) => {
   output.pipe(process.stdout);
 
   const rl = readline.createInterface({ terminal: true, input, output });
-  const screen = new ScreenManager(rl);
+  const screen: IScreenManager = new ScreenManager(rl);
 
   let tick = 0;
 
@@ -25,11 +24,11 @@ export const createPrompt = (render: (spinner: string) => string) => {
 
   const loop = () => {
     tick++;
-    screen.render(render(getSpinner()));
+    screen.render(render(getSpinner()), "");
   };
   let interval = setInterval(loop, spinner.interval);
 
-  const update = () => screen.render(render(getSpinner()));
+  const update = () => screen.render(render(getSpinner()), "");
 
   const dispose = () => {
     clearInterval(interval);

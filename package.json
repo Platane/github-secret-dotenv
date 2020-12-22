@@ -29,8 +29,10 @@
     "tweetsodium": "0.0.5"
   },
   "devDependencies": {
+    "@types/inquirer": "7.3.1",
     "@types/jest": "26.0.19",
-    "@types/node": "14.14.13",
+    "@types/mute-stream": "0.0.0",
+    "@types/node": "14.14.14",
     "jest": "26.6.3",
     "prettier": "2.2.1",
     "ts-jest": "26.4.4",
@@ -47,10 +49,11 @@
   "files": [
     "lib/**/*.*"
   ],
+  "main": "lib/index.js",
   "scripts": {
     "type": "tsc --noEmit",
     "test": "YYY_TEST=leak jest --verbose",
-    "build": "tsc --outDir lib/ && cp src/cli/bin lib/cli/bin && rm -rf lib/__tests__ lib/__fixtures__",
+    "build": "tsc --declaration --outDir lib/ && cp src/cli/bin lib/cli/bin && rm -rf lib/__tests__ lib/__fixtures__",
     "dev": "ts-node ./src/cli/index.ts",
     "lint": "yarn prettier -c '**/*.{ts,tsx,js,jsx,json,md}' '!lib/**'"
   }
