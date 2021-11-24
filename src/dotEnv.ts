@@ -1,7 +1,7 @@
 import fs from "fs";
 import dotenv from "dotenv";
 import dotenvExpand from "dotenv-expand";
-import type { BaseEncodingOptions } from "fs";
+import type { ObjectEncodingOptions } from "fs";
 
 export const readEnv = ({
   path = ".env",
@@ -9,7 +9,7 @@ export const readEnv = ({
   ...dotEnvOptions
 }: dotenv.DotenvParseOptions & {
   path?: string;
-  encoding?: BaseEncodingOptions["encoding"];
+  encoding?: ObjectEncodingOptions["encoding"];
 } = {}) => {
   const content = fs.readFileSync(path, { encoding });
 

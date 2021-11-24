@@ -25,7 +25,7 @@ export const list = async ({
 
     try {
       originalEnvContent = fs.readFileSync(dotEnvTemplateFilename).toString();
-    } catch (error) {
+    } catch (error: any) {
       if (error.code !== "ENOENT") throw error;
     }
 
