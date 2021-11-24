@@ -1,4 +1,4 @@
-import program from "commander";
+import { Command } from "commander";
 import { list } from "./commandList";
 import { upload } from "./commandUpload";
 import { parseOptions } from "./parseOptions";
@@ -12,9 +12,11 @@ const githubAccessTokenOption = [
   "Your github access token\nIf omitted, read it from GITHUB_ACCESS_TOKEN env var\nGenerate one from https://github.com/settings/tokens/new\nMust have permissions [public_repo  read:public_key]",
 ] as const;
 
-const p = program.name("github-secret-dotenv");
+const program = new Command();
+program.name("github-secret-dotenv");
 
-p.command("upload", { isDefault: true })
+program
+  .command("upload", { isDefault: true })
   .description("Upload secrets to github from your .env file.")
   .option(...repositoryOption)
   .option(...githubAccessTokenOption)
@@ -46,7 +48,8 @@ p.command("upload", { isDefault: true })
     });
   });
 
-p.command("list")
+program
+  .command("list")
   .description("List secrets present in the repository.")
   .option(...repositoryOption)
   .option(...githubAccessTokenOption)
@@ -55,12 +58,8 @@ p.command("list")
     "Write secrets names in a .env template file"
   )
   .action(async (rawOptions) => {
-    const {
-      owner,
-      repo,
-      githubAccessToken,
-      dotEnvTemplateFilename,
-    } = parseOptions(rawOptions);
+    const { owner, repo, githubAccessToken, dotEnvTemplateFilename } =
+      parseOptions(rawOptions);
 
     if (!owner || !repo) throw new Error("undefined repository");
 

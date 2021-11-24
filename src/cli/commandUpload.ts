@@ -57,7 +57,7 @@ export const upload = async ({
           await removeSecret({ owner, repo, githubAccessToken }, i.name);
 
         i.status = "done";
-      } catch (error) {
+      } catch (error: any) {
         i.status = "error";
         i.error = error;
       }
