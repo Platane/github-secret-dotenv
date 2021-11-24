@@ -7,28 +7,34 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v2.3.3
-      - uses: actions/setup-node@v1.4.4
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
         with:
+          cache: yarn
           node-version: 12
-      - uses: bahmutov/npm-install@v1.6.2
+      - run: yarn install --frozen-lockfile
       - run: yarn type
       - run: yarn lint
       - run: yarn test --ci
         env:
           GITHUB_ACCESS_TOKEN: ${{ secrets.MY_GITHUB_ACCESS_TOKEN }}
 
+      - name: test help command
+        run: yarn dev help
+
       - name: test list command
         run: yarn dev list
         env:
           GITHUB_ACCESS_TOKEN: ${{ secrets.MY_GITHUB_ACCESS_TOKEN }}
 
-      - name: test upload command
+      - name: generate a .env.test with a random XXX_TEST value
         run: |
-          # generate a .env.test with a random XXX_TEST value
           export XXX_TEST=xxxtest$RANDOM
           echo "XXX_TEST=$XXX_TEST" >> .env.test
+          cat .env.test
 
+      - name: test upload command, please manually run the "print-secret" action to confirm XXX_TEST was set
+        run: |
           # the command should not read this env var, only the content of the .env file
           export XXX_TEST=leak
 
@@ -48,22 +54,6 @@ jobs:
         with:
           name: package
           path: github-secret-dotenv.tgz
-
-  check-secrets:
-    runs-on: ubuntu-latest
-    needs: test-and-build
-    steps:
-      - name: check current secret XXX_TEST
-        run: echo "${XXX_TEST:0:1}.${XXX_TEST:1}"
-        env:
-          XXX_TEST: ${{ secrets.XXX_TEST }}
-
-      - uses: actions/download-artifact@v2
-        with:
-          name: env-test
-
-      - name: check uploaded secret XXX_TEST (notice that secret are usually not updated until the next run)
-        run: cat .env.test | cut -d= -f2
 
   test-package:
     strategy:
@@ -93,7 +83,7 @@ jobs:
         with:
           name: package
 
-      - uses: actions/setup-node@v1.4.4
+      - uses: actions/setup-node@v2
         with:
           node-version: 12
 
